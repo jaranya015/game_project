@@ -67,10 +67,15 @@ class MainWidget(Widget):
                 self.horizontal_lines.append(Line())
                 
     def update_horizontal_lines(self):
-        xmin = 0
-        xmax = self.width
+        central_line_x = int(self.width / 2)
+        spacing = self.V_LINES_SPACING * self.width
+        offset = int(self.V_NB_LINES/2) - 0.5
+        
+        specing_y = self.H_LINES_SPACING*self.height
+        xmin = central_line_x - offset * spacing 
+        xmax = central_line_x + offset * spacing
         for i in range(0, self.H_NB_LINES):
-                line_y = i*self.H_LINES_SPACING*self.height
+                line_y = i*specing_y
                 x1, y1 = self.transform(xmin, line_y)
                 x2, y2 = self.transform(xmax, line_y)
                 self.horizontal_lines[i].points = [x1, y1, x2, y2]
