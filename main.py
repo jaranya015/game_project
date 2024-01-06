@@ -8,9 +8,13 @@ class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
     
-    V_NB_LINES = 7
+    V_NB_LINES = 4
     V_LINES_SPACING = .1 # precentage in screen width
     vertical_line = []
+    
+    H_NB_LINES = 4
+    H_LINES_SPACING = .2  #  percentage in screen height
+    horizontal_line = []
     
     def __init__(self, **kwargs):
         super(MainWidget,self).__init__(**kwargs)
@@ -46,7 +50,7 @@ class MainWidget(Widget):
         central_line_x = int(self.width / 2)
         #self.line.points = [center_x, 0, center_x, 100] #ตำแหน่งของจุดทั้งหมดที่ใช้ในการสร้างเส้น (Line) บน canvas
         spacing = self.V_LINES_SPACING * self.width
-        offset = -int(self.V_NB_LINES/2)
+        offset = -int(self.V_NB_LINES/2) + 0.5
         for i in range(0, self.V_NB_LINES):
                 line_x = int(central_line_x + offset * spacing)
                 x1, y1 = self.transform(line_x, 0)
