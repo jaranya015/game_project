@@ -8,11 +8,11 @@ class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
     
-    V_NB_LINES = 4
-    V_LINES_SPACING = .1 # precentage in screen width
+    V_NB_LINES = 10
+    V_LINES_SPACING = .2 # precentage in screen width
     vertical_lines = []
     
-    H_NB_LINES = 4
+    H_NB_LINES = 10
     H_LINES_SPACING = .2  #  percentage in screen height
     horizontal_lines = []
     
@@ -74,6 +74,7 @@ class MainWidget(Widget):
         specing_y = self.H_LINES_SPACING*self.height
         xmin = central_line_x - offset * spacing 
         xmax = central_line_x + offset * spacing
+        
         for i in range(0, self.H_NB_LINES):
                 line_y = i*specing_y
                 x1, y1 = self.transform(xmin, line_y)
@@ -86,18 +87,21 @@ class MainWidget(Widget):
         return self.transform_perspective(x, y) # ออันนี้ทำให้ PERSPECTIVE
     
     def transform_2D(self, x, y):
-        return x, y
+        return int(x), int(y)
     
     def transform_perspective(self, x, y):
-        tr_y = y * self.perspective_point_y / self.height
-        if tr_y > self.perspective_point_y:
-            tr_y = self.perspective_point_y
+        lin_y = y * self.perspective_point_y / self.height
+        if lin_y > self.perspective_point_y:
+            lin_y = self.perspective_point_y
             
         diff_x = x - self.perspective_point_x
-        diff_y = self.perspective_point_y - tr_y
-        proportion_y = diff_y / self.perspective_point_y # 1 when diff_y == self.perspective_point_y / 0 when diff_y = 0
+        diff_y = self.perspective_point_y - lin_y
+        #proportion_y = diff_y / self.perspective_point_y # 1 when diff_y == self.perspective_point_y / 0 when diff_y = 0
+        factor_y = diff_y/self.perspective_point_y
+        factor_y = factor_y * factor_y
         
-        tr_x  = self.perspective_point_x + diff_x * proportion_y
+        tr_x  = self.perspective_point_x + diff_x * factor_y
+        tr_y = self.perspective_point_y - factor_y * self.perspective_point_y
         return int(tr_x), int(tr_y)
     
 class CompsuApp(App):
