@@ -9,11 +9,11 @@ class MainWidget(Widget):
     perspective_point_y = NumericProperty(0)
     
     V_NB_LINES = 10
-    V_LINES_SPACING = .2 # precentage in screen width
+    V_LINES_SPACING = .25 # precentage in screen width
     vertical_lines = []
     
-    H_NB_LINES = 10
-    H_LINES_SPACING = .2  #  percentage in screen height
+    H_NB_LINES = 15
+    H_LINES_SPACING = .1  #  percentage in screen height
     horizontal_lines = []
     
     def __init__(self, **kwargs):
@@ -96,9 +96,8 @@ class MainWidget(Widget):
             
         diff_x = x - self.perspective_point_x
         diff_y = self.perspective_point_y - lin_y
-        #proportion_y = diff_y / self.perspective_point_y # 1 when diff_y == self.perspective_point_y / 0 when diff_y = 0
         factor_y = diff_y/self.perspective_point_y
-        factor_y = factor_y * factor_y
+        factor_y = pow(factor_y, 4)
         
         tr_x  = self.perspective_point_x + diff_x * factor_y
         tr_y = self.perspective_point_y - factor_y * self.perspective_point_y
