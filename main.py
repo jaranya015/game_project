@@ -1,10 +1,9 @@
-import kivy.uix.clock
 from kivy.app import App
 from kivy.properties import NumericProperty #เป็นคลาสที่ใช้สร้าง property สำหรับเก็บค่าตัวเลข 
 from kivy.uix.widget import Widget
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Line
-from kivy.uix.clock import Clock
+from kivy.clock import Clock
 
 class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
@@ -18,12 +17,15 @@ class MainWidget(Widget):
     H_LINES_SPACING = .1  #  percentage in screen height
     horizontal_lines = []
     
+    SPEED = 4
+    current_offset_y = 0
+    
     def __init__(self, **kwargs):
         super(MainWidget,self).__init__(**kwargs)
         #print("INIT W:" + str(self.width) + " H:" + str(self.height))
         self.init_vertical_lines()
         self.init_horizontal_lines()
-        clock.schedule_interval(self.update, 1.0 / 60.0)
+        Clock.schedule_interval(self.update, 1.0 / 60.0)
         
     def on_parent(self, widget, parent):
         #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
@@ -33,8 +35,9 @@ class MainWidget(Widget):
         #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
         # self.perspective_point_x = self.width/2
         # self.perspective_point_y = self.height * 0.75
-        self.update_vertical_lines()
-        self.update_horizontal_lines()# เพื่ออัปเดตคุณสมบัติของเส้นที่ถูกวาดบน canvas ของ widget
+        # self.update_vertical_lines()
+        # self.update_horizontal_lines()# เพื่ออัปเดตคุณสมบัติของเส้นที่ถูกวาดบน canvas ของ widget
+        pass
         
     def on_perspective_point_x(self, widget, value):
         #print("PX:" + str(value))
@@ -79,7 +82,7 @@ class MainWidget(Widget):
         xmax = central_line_x + offset * spacing
         
         for i in range(0, self.H_NB_LINES):
-                line_y = i*specing_y
+                line_y = i*specing_y - self.current_offset_y
                 x1, y1 = self.transform(xmin, line_y)
                 x2, y2 = self.transform(xmax, line_y)
                 self.horizontal_lines[i].points = [x1, y1, x2, y2]
@@ -107,7 +110,14 @@ class MainWidget(Widget):
         return int(tr_x), int(tr_y)
     
     def update(self, dt):
-        print("update")
+        #print("update")
+        self.update_vertical_lines()
+        self.update_horizontal_lines()
+        self.current_offset_y += self.SPEED
+        
+        specing_y = self.H_LINES_SPACING * self.height
+        if self.current_offset_y >= specing_y:
+            self.current_offset_y -= specing_y
     
 class CompsuApp(App):
     def build(self):
