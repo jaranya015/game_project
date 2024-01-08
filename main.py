@@ -1,8 +1,10 @@
+import kivy.uix.clock
 from kivy.app import App
 from kivy.properties import NumericProperty #เป็นคลาสที่ใช้สร้าง property สำหรับเก็บค่าตัวเลข 
 from kivy.uix.widget import Widget
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Line
+from kivy.uix.clock import Clock
 
 class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
@@ -21,6 +23,7 @@ class MainWidget(Widget):
         #print("INIT W:" + str(self.width) + " H:" + str(self.height))
         self.init_vertical_lines()
         self.init_horizontal_lines()
+        clock.schedule_interval(self.update, 1.0 / 60.0)
         
     def on_parent(self, widget, parent):
         #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
@@ -102,6 +105,9 @@ class MainWidget(Widget):
         tr_x  = self.perspective_point_x + diff_x * factor_y
         tr_y = self.perspective_point_y - factor_y * self.perspective_point_y
         return int(tr_x), int(tr_y)
+    
+    def update(self, dt):
+        print("update")
     
 class CompsuApp(App):
     def build(self):
