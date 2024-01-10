@@ -10,6 +10,7 @@ from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Line
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.graphics import Quad
 
 class MainWidget(Widget):
     from transforms import transform, transform_2D, transform_perspective
@@ -32,11 +33,16 @@ class MainWidget(Widget):
     current_offset_x = 0
     current_offset_x = 0
     
+    title = None
+    ti_x = 1
+    ti_y = 2
+    
     def __init__(self, **kwargs):
         super(MainWidget,self).__init__(**kwargs)
         #print("INIT W:" + str(self.width) + " H:" + str(self.height))
         self.init_vertical_lines()
         self.init_horizontal_lines()
+        self.init_tiles()
         
         if self.is_desktop():
             self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
@@ -49,13 +55,18 @@ class MainWidget(Widget):
         if platform in ('linux', 'windows', 'macosx'):
             return True
         return False
-  
+    
+    def init_tiles(self):
+        with self.canvas:
+            Color(1, 1, 1) #กำหนดสีของเส้นเป็นขาว
+            self.title = Quad()
+    
     def init_vertical_lines(self):
         with self.canvas:
             Color(1, 1, 1) #กำหนดสีของเส้นเป็นขาว
             #self.line = Line(points=[100, 0, 100, 100]) #ลักษณะของเส้นที่ถูกสร้าง
             for i in range(0, self.V_NB_LINES):
-                self.vertical_lines.append(Line(points=[0, 0, 0, 0]))
+                self.vertical_lines.append(Line())
                 
     def get_line_x_from_index(self, index):
         central_line_x = self.perspective_point_x
@@ -69,7 +80,25 @@ class MainWidget(Widget):
         specing_y = self.H_LINES_SPACING*self.height
         line_y = index * specing_y - self.current_offset_y
         return line_y
-                
+    
+    def get_titel_coordinates(self, ti_x, ti_y):
+        x = self.get_line_x_from_index(ti_x)
+        y = self.get_line_y_from_index(ti_y)
+        return x, y
+    
+    def update_tiles(self):
+        xmin, ymin = self.get_titel_coordinates(self.ti_x, self.ti_y)
+        xmax, ymax = self.get_titel_coordinates(self.ti_x + 1, self.ti_y + 1)
+        
+        # 2 3
+        #
+        # 1 4
+        x1, y1 = self.transform(xmin, ymin)
+        x2, y2 = self.transform(xmin, ymax)
+        x3, y3 = self.transform(xmax, ymax)
+        x4, y4 = self.transform(xmax, ymin)
+        self.title.points = [x1, y1, x2, y2, x3, y3, x4, y4]
+        
     def update_vertical_lines(self):
         # -1 0 1 2
         start_index = -int(self.V_NB_LINES/2) + 1
@@ -108,6 +137,7 @@ class MainWidget(Widget):
         time_factor = dt*60
         self.update_vertical_lines()
         self.update_horizontal_lines()
+        self.update_tiles()
         # self.current_offset_y += self.SPEED * time_factor
         
         specing_y = self.H_LINES_SPACING * self.height
