@@ -13,7 +13,7 @@ from kivy.core.window import Window
 
 class MainWidget(Widget):
     from transforms import transform, transform_2D, transform_perspective
-    from user_actions import keyboard_closed, on_keyboard_up, on_keybord_down, on_touch_up, on_touch_down
+    from user_actions import keyboard_closed,on_keyboard_up, on_keyboard_down, on_touch_up, on_touch_down
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
     
@@ -44,37 +44,12 @@ class MainWidget(Widget):
             self._keyboard.bind(on_key_up=self.on_keyboard_up)
         
         Clock.schedule_interval(self.update, 1.0 / 60.0)
-
-    def keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self.on_keyboard_down)
-        self._keyboard.unbind(on_key_up=self.on_keyboard_up)
-        self._keyboard = None
         
     def is_desktop(self):
         if platform in ('linux', 'windows', 'macosx'):
             return True
         return False
-        
-    def on_parent(self, widget, parent):
-        #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
-        pass
-    
-    def on_size(self, *args):
-        #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
-        # self.perspective_point_x = self.width/2
-        # self.perspective_point_y = self.height * 0.75
-        # self.update_vertical_lines()
-        # self.update_horizontal_lines()# เพื่ออัปเดตคุณสมบัติของเส้นที่ถูกวาดบน canvas ของ widget
-        pass
-        
-    def on_perspective_point_x(self, widget, value):
-        #print("PX:" + str(value))
-        pass
-        
-    def on_perspective_point_y(self, widget, value):
-        #print("PY:" + str(value))
-        pass
-    
+  
     def init_vertical_lines(self):
         with self.canvas:
             Color(1, 1, 1) #กำหนดสีของเส้นเป็นขาว

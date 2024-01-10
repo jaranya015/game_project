@@ -1,3 +1,8 @@
+def keyboard_closed(self):
+    self._keyboard.unbind(on_key_down=self.on_keyboard_down)
+    self._keyboard.unbind(on_key_up=self.on_keyboard_up)
+    self._keyboard = None
+
 def on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if keycode[1] == 'left':
             self.current_speed_x = self.SPEED_x
