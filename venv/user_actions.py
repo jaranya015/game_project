@@ -1,0 +1,22 @@
+def on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == 'left':
+            self.current_speed_x = self.SPEED_x
+        elif keycode[1] == 'right':
+            self.current_speed_x = -self.SPEED_x
+        return True
+            
+def on_keyboard_up(self, keyboard, keycode):
+    self.current_speed_x = 0
+    return True
+
+def on_touch_down(self, touch):
+    if touch.x < self.width/2:
+        # print("<-")
+        self.current_speed_x = self.SPEED_x
+    else:
+        # print("->")
+        self.current_speed_x = -self.SPEED_x
+
+def on_touch_up(self, touch):
+    #print("up")
+    self.current_speed_x = 0
