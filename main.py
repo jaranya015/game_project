@@ -17,8 +17,8 @@ class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
     
-    V_NB_LINES = 10
-    V_LINES_SPACING = .25 # precentage in screen width
+    V_NB_LINES = 4
+    V_LINES_SPACING = .1 # precentage in screen width
     vertical_lines = []
     
     H_NB_LINES = 15
@@ -57,18 +57,28 @@ class MainWidget(Widget):
             for i in range(0, self.V_NB_LINES):
                 self.vertical_lines.append(Line(points=[0, 0, 0, 0]))
                 
-    def update_vertical_lines(self):
-        central_line_x = int(self.width / 2)
-        #self.line.points = [center_x, 0, center_x, 100] #ตำแหน่งของจุดทั้งหมดที่ใช้ในการสร้างเส้น (Line) บน canvas
+    def get_line_x_from_index(self, index):
+        central_line_x = self.perspective_point_x
         spacing = self.V_LINES_SPACING * self.width
-        offset = -int(self.V_NB_LINES/2) + 0.5
-        for i in range(0, self.V_NB_LINES):
-                line_x = central_line_x + offset * spacing + self.current_offset_x
+        offset = index - 0.5
+        line_x = central_line_x + offset * spacing + self.current_offset_x
+        return line_x
+    
+    def get_line_y_from_index(self, index):
+                
+        specing_y = self.H_LINES_SPACING*self.height
+        line_y = index * specing_y - self.current_offset_y
+        return line_y
+                
+    def update_vertical_lines(self):
+        # -1 0 1 2
+        start_index = -int(self.V_NB_LINES/2) + 1
+        for i in range(start_index, start_index + self.V_NB_LINES):
+                line_x = self.get_line_x_from_index(i)
                 
                 x1, y1 = self.transform(line_x, 0)
                 x2, y2 = self.transform(line_x, self.height)
                 self.vertical_lines[i].points = [x1, y1, x2, y2]
-                offset += 1
                 
     def init_horizontal_lines(self):
         with self.canvas:
@@ -77,16 +87,18 @@ class MainWidget(Widget):
                 self.horizontal_lines.append(Line())
                 
     def update_horizontal_lines(self):
-        central_line_x = int(self.width / 2)
-        spacing = self.V_LINES_SPACING * self.width
-        offset = int(self.V_NB_LINES/2) - 0.5
+        # central_line_x = int(self.width / 2)
+        # spacing = self.V_LINES_SPACING * self.width
+        # offset = int(self.V_NB_LINES/2) - 0.5
+        start_index = -int(self.V_NB_LINES/2) + 1
+        end_index = start_index + self.V_NB_LINES - 1
         
         specing_y = self.H_LINES_SPACING*self.height
-        xmin = central_line_x - offset * spacing + self.current_offset_x
-        xmax = central_line_x + offset * spacing + self.current_offset_x
+        xmin = self.get_line_x_from_index(start_index)
+        xmax = self.get_line_x_from_index(end_index)
         
         for i in range(0, self.H_NB_LINES):
-                line_y = i*specing_y - self.current_offset_y
+                line_y = self.get_line_y_from_index(i)
                 x1, y1 = self.transform(xmin, line_y)
                 x2, y2 = self.transform(xmax, line_y)
                 self.horizontal_lines[i].points = [x1, y1, x2, y2]
@@ -96,13 +108,13 @@ class MainWidget(Widget):
         time_factor = dt*60
         self.update_vertical_lines()
         self.update_horizontal_lines()
-        self.current_offset_y += self.SPEED
+        # self.current_offset_y += self.SPEED * time_factor
         
         specing_y = self.H_LINES_SPACING * self.height
         if self.current_offset_y >= specing_y:
             self.current_offset_y -= specing_y
             
-        self.current_offset_x += self.current_offset_x * time_factor
+        # self.current_offset_x += self.current_offset_x * time_factor
     
 class CompsuApp(App):
     def build(self):
