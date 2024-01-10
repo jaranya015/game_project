@@ -34,9 +34,12 @@ class MainWidget(Widget):
     current_offset_x = 0
     current_offset_x = 0
     
-    title = None
-    ti_x = 1
-    ti_y = 2
+    NB_TILES = 4
+    title = []
+    titles_coordinates = []
+
+    # ti_x = 1
+    # ti_y = 2
     
     def __init__(self, **kwargs):
         super(MainWidget,self).__init__(**kwargs)
@@ -44,6 +47,7 @@ class MainWidget(Widget):
         self.init_vertical_lines()
         self.init_horizontal_lines()
         self.init_tiles()
+        self.generate_tiles_coordinate()
         
         if self.is_desktop():
             self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
@@ -60,7 +64,12 @@ class MainWidget(Widget):
     def init_tiles(self):
         with self.canvas:
             Color(1, 1, 1) #กำหนดสีของเส้นเป็นขาว
-            self.title = Quad()
+            for i in range(0, self.NB_TILES):
+                self.title.append(Quad())
+                
+    def generate_tiles_coordinate(self):
+        for i in range(0, self.NB_TILES):
+            self.titles_coordinates.append((0, i))
     
     def init_vertical_lines(self):
         with self.canvas:
@@ -89,17 +98,20 @@ class MainWidget(Widget):
         return x, y
     
     def update_tiles(self):
-        xmin, ymin = self.get_titel_coordinates(self.ti_x, self.ti_y)
-        xmax, ymax = self.get_titel_coordinates(self.ti_x + 1, self.ti_y + 1)
-        
-        # 2 3
-        #
-        # 1 4
-        x1, y1 = self.transform(xmin, ymin)
-        x2, y2 = self.transform(xmin, ymax)
-        x3, y3 = self.transform(xmax, ymax)
-        x4, y4 = self.transform(xmax, ymin)
-        self.title.points = [x1, y1, x2, y2, x3, y3, x4, y4]
+        for i in range(0, self.NB_TILES):
+            tile = self.title[i]
+            tile_coordinates = self.titles_coordinates[i]
+            xmin, ymin = self.get_titel_coordinates(tile_coordinates[0], tile_coordinates[1])
+            xmax, ymax = self.get_titel_coordinates(tile_coordinates[0] + 1, tile_coordinates[1] + 1)
+            
+            # 2 3
+            #
+            # 1 4
+            x1, y1 = self.transform(xmin, ymin)
+            x2, y2 = self.transform(xmin, ymax)
+            x3, y3 = self.transform(xmax, ymax)
+            x4, y4 = self.transform(xmax, ymin)
+            tile.points = [x1, y1, x2, y2, x3, y3, x4, y4]
         
     def update_vertical_lines(self):
         # -1 0 1 2
