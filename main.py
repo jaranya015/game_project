@@ -2,6 +2,7 @@ from kivy.config import Config
 Config.set('graphics', 'width', '900')
 Config.set('graphics', 'height', '400')
 
+from kivy import platform
 from kivy.app import App
 from kivy.properties import NumericProperty #เป็นคลาสที่ใช้สร้าง property สำหรับเก็บค่าตัวเลข 
 from kivy.uix.widget import Widget
@@ -35,9 +36,10 @@ class MainWidget(Widget):
         self.init_vertical_lines()
         self.init_horizontal_lines()
         
-        self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self._keyboard.bind(on_key_up=self._on_keyboard_down)
+        if self.is_desktop():
+            self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
+            self._keyboard.bind(on_key_down=self.on_keyboard_down)
+            self._keyboard.bind(on_key_up=self.on_keyboard_up)
         
         Clock.schedule_interval(self.update, 1.0 / 60.0)
 
@@ -45,6 +47,11 @@ class MainWidget(Widget):
         self._keyboard.unbind(on_key_down=self.on_keyboard_down)
         self._keyboard.unbind(on_key_up=self.on_keyboard_up)
         self._keyboard = None
+        
+    def is_desktop(self):
+        if platform in ('linux', 'windows', 'macosx'):
+            return True
+        return False
         
     def on_parent(self, widget, parent):
         #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
@@ -149,7 +156,7 @@ class MainWidget(Widget):
             self.current_speed_x = -self.SPEED_x
     
     def on_touch_up(self, touch):
-        print("up")
+        #print("up")
         self.current_speed_x = 0
     
     def update(self, dt):
