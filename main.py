@@ -14,7 +14,7 @@ class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
     
-    V_NB_LINES = 2
+    V_NB_LINES = 10
     V_LINES_SPACING = .25 # precentage in screen width
     vertical_lines = []
     
@@ -43,21 +43,8 @@ class MainWidget(Widget):
 
     def keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self.on_keyboard_down)
+        self._keyboard.unbind(on_key_up=self.on_keyboard_up)
         self._keyboard = None
-
-    def on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        if keycode[1] == 'left':
-            self.player1.center_y += 10
-        elif keycode[1] == 'right':
-            self.player1.center_y -= 10
-        elif keycode[1] == 'up':
-            self.player2.center_y += 10
-        elif keycode[1] == 'down':
-            self.player2.center_y -= 10
-        return True
-    
-    def on_keyboard_up(self, keyboard, keycode):
-        return True
         
     def on_parent(self, widget, parent):
         #print("ON PARENY W:" + str(self.width) + " H:" +str(self.height))
@@ -142,17 +129,28 @@ class MainWidget(Widget):
         tr_y = self.perspective_point_y - factor_y * self.perspective_point_y
         return int(tr_x), int(tr_y)
     
+    def on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        if keycode[1] == 'left':
+            self.current_speed_x = self.SPEED_x
+        elif keycode[1] == 'right':
+            self.current_speed_x = -self.SPEED_x
+        return True
+            
+    def on_keyboard_up(self, keyboard, keycode):
+        self.current_speed_x = 0
+        return True
+    
     def on_touch_down(self, touch):
         if touch.x < self.width/2:
-            print("<-")
-            self.current_offset_x = self.SPEED_x
+            # print("<-")
+            self.current_speed_x = self.SPEED_x
         else:
-            print("->")
-            self.current_offset_x = -self.SPEED_x
+            # print("->")
+            self.current_speed_x = -self.SPEED_x
     
     def on_touch_up(self, touch):
         print("up")
-        self.current_offset_x = 0
+        self.current_speed_x = 0
     
     def update(self, dt):
         # print("dt: " + str(dt*60)) 
