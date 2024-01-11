@@ -68,8 +68,26 @@ class MainWidget(Widget):
                 self.title.append(Quad())
                 
     def generate_tiles_coordinate(self):
-        for i in range(0, self.NB_TILES):
-            self.titles_coordinates.append((0, i))
+        
+        last_y = 0
+        
+        # clean the coordinate that are out of the screen
+        # ti_y < self.current_y_loop
+        for i in range(len(self.titles_coordinates)-1, -1, -1):
+            if self.titles_coordinates[i][1] < self.current_y_loop:
+                del self.titles_coordinates[i]
+         
+        if len(self.titles_coordinates) > 0:
+            last_coordinates = self.titles_coordinates[-1]
+            last_y = last_coordinates[1] + 1
+       
+        print("foo1")
+            
+        for i in range(len(self.titles_coordinates), self.NB_TILES):
+            self.titles_coordinates.append((0, last_y))
+            last_y += 1
+      
+        print("foo2")
     
     def init_vertical_lines(self):
         with self.canvas:
@@ -158,6 +176,7 @@ class MainWidget(Widget):
         if self.current_offset_y >= specing_y:
             self.current_offset_y -= specing_y
             self.current_y_loop += 1
+            self.generate_tiles_coordinate()
             print("loop : " + str(self.current_y_loop ))
         # self.current_offset_x += self.current_offset_x * time_factor
     
