@@ -11,6 +11,7 @@ from kivy.graphics.vertex_instructions import Line
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Quad
+import random
 
 class MainWidget(Widget):
     from transforms import transform, transform_2D, transform_perspective
@@ -26,7 +27,7 @@ class MainWidget(Widget):
     H_LINES_SPACING = .1  #  percentage in screen height
     horizontal_lines = []
     
-    SPEED = 1
+    SPEED = 4
     current_offset_y = 0
     current_y_loop = 0
     
@@ -68,7 +69,7 @@ class MainWidget(Widget):
                 self.title.append(Quad())
                 
     def generate_tiles_coordinate(self):
-        
+        last_x = 0
         last_y = 0
         
         # clean the coordinate that are out of the screen
@@ -80,11 +81,30 @@ class MainWidget(Widget):
         if len(self.titles_coordinates) > 0:
             last_coordinates = self.titles_coordinates[-1]
             last_y = last_coordinates[1] + 1
+            last_x = last_coordinates[0]
        
         print("foo1")
             
         for i in range(len(self.titles_coordinates), self.NB_TILES):
-            self.titles_coordinates.append((0, last_y))
+            r = random.randint(0, 2)
+            # 0 -> straight
+            # 1 -> right
+            # 2 -> left
+            
+            self.titles_coordinates.append((last_x, last_y))
+            if r == 1:
+                last_x += 1
+                self.titles_coordinates.append((last_x, last_y))
+                last_y += 1
+                self.titles_coordinates.append((last_x, last_y))
+                
+            if r == 2:
+                last_x -= 1
+                self.titles_coordinates.append((last_x, last_y))
+                last_y += 1
+                self.titles_coordinates.append((last_x, last_y))
+                
+                
             last_y += 1
       
         print("foo2")
@@ -178,7 +198,7 @@ class MainWidget(Widget):
             self.current_y_loop += 1
             self.generate_tiles_coordinate()
             print("loop : " + str(self.current_y_loop ))
-        # self.current_offset_x += self.current_offset_x * time_factor
+        self.current_offset_x += self.current_offset_x * time_factor
     
 class CompsuApp(App):
     def build(self):
