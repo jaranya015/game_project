@@ -26,3 +26,11 @@ def on_touch_down(self, touch):
 def on_touch_up(self, touch):
     #print("up")
     self.current_speed_x = 0
+    
+def on_motion(self, etype, motionevent):
+    if etype == 'begin':
+        self.last_x = motionevent.motion_x
+    elif etype == 'update':
+        self.calculate_offset_x(motionevent.motion_x)
+    elif etype == 'end':
+        pass

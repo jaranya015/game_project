@@ -34,7 +34,7 @@ class MainWidget(Widget):
     
     SPEED_x = 12
     current_offset_x = 0
-    current_offset_x = 0
+    current_speed_x = 0
     
     NB_TILES = 4
     title = []
@@ -49,7 +49,7 @@ class MainWidget(Widget):
     # ti_y = 2
     
     def __init__(self, **kwargs):
-        super(MainWidget,self).__init__(**kwargs)
+        super(MainWidget, self).__init__(**kwargs)
         #print("INIT W:" + str(self.width) + " H:" + str(self.height))
         self.init_vertical_lines()
         self.init_horizontal_lines()
@@ -57,6 +57,7 @@ class MainWidget(Widget):
         self.init_ship()
         self.pre_fill_tiles_coordinates()
         self.generate_tiles_coordinate()
+        self.current_speed_x = 0 
         
         if self.is_desktop():
             self._keyboard = Window.request_keyboard(self.keyboard_closed, self)
@@ -239,7 +240,7 @@ class MainWidget(Widget):
             self.current_y_loop += 1
             self.generate_tiles_coordinate()
             print("loop : " + str(self.current_y_loop ))
-        self.current_offset_x += self.current_offset_x * time_factor
+        self.current_offset_x += self.current_speed_x * time_factor
     
 class CompsuApp(App):
     def build(self):
