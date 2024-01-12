@@ -68,6 +68,11 @@ class MainWidget(Widget):
             for i in range(0, self.NB_TILES):
                 self.title.append(Quad())
                 
+    def pre_fill_tiles_coordinates(self):
+        # 10 tiles in a straight line
+        for i in range(0, 10):
+            self.titles_coordinates.append((0, i))
+                
     def generate_tiles_coordinate(self):
         last_x = 0
         last_y = 0
