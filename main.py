@@ -21,22 +21,22 @@ class MainWidget(Widget):
     perspective_point_y = NumericProperty(0)
     
     V_NB_LINES = 8
-    V_LINES_SPACING = .2 # precentage in screen width
+    V_LINES_SPACING = .4 # precentage in screen width
     vertical_lines = []
     
     H_NB_LINES = 15
     H_LINES_SPACING = .1  #  percentage in screen height
     horizontal_lines = []
     
-    SPEED = 4
+    SPEED = .8
     current_offset_y = 0
     current_y_loop = 0
     
-    SPEED_x = 12
+    SPEED_x = 3.0
     current_offset_x = 0
     current_speed_x = 0
     
-    NB_TILES = 4
+    NB_TILES = 16
     title = []
     titles_coordinates = []
     
@@ -232,7 +232,9 @@ class MainWidget(Widget):
         self.update_horizontal_lines()
         self.update_ship()
         self.update_tiles()
-        self.current_offset_y += self.SPEED * time_factor  # move
+        
+        speed_y = self.SPEED * self.height / 100
+        self.current_offset_y += speed_y * time_factor  # move
         
         specing_y = self.H_LINES_SPACING * self.height
         if self.current_offset_y >= specing_y:
@@ -240,7 +242,9 @@ class MainWidget(Widget):
             self.current_y_loop += 1
             self.generate_tiles_coordinate()
             print("loop : " + str(self.current_y_loop ))
-        self.current_offset_x += self.current_speed_x * time_factor
+            
+        speed_x = self.current_offset_x *self.width / 100
+        self.current_offset_x += speed_x * time_factor
     
 class CompsuApp(App):
     def build(self):
