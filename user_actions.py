@@ -4,14 +4,15 @@ def keyboard_closed(self):
     self._keyboard = None
 
 def on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        if keycode[1] == 'left':
-            self.current_speed_x = self.SPEED_x
-        elif keycode[1] == 'right':
-            self.current_speed_x = -self.SPEED_x
-        return True
-            
+    if keycode[1] == 'd':
+        self.current_speed_x = self.SPEED_x
+    elif keycode[1] == 'a':
+        self.current_speed_x = -self.SPEED_x
+    return True
+
 def on_keyboard_up(self, keyboard, keycode):
-    self.current_speed_x = 0
+    if keycode[1] == 'd' or keycode[1] == 'a':
+        self.current_speed_x = 0
     return True
 
 def on_touch_down(self, touch):

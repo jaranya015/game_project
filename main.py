@@ -11,6 +11,7 @@ from kivy.graphics.vertex_instructions import Line
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics import Quad
+from kivy.graphics import Triangle
 import random
 
 class MainWidget(Widget):
@@ -38,6 +39,11 @@ class MainWidget(Widget):
     NB_TILES = 4
     title = []
     titles_coordinates = []
+    
+    SHIP_WIDTH = .1
+    SHIP_HEIGHT = 0.035
+    SHIP_BASE_Y = 0.04
+    ship = None
 
     # ti_x = 1
     # ti_y = 2
@@ -48,6 +54,8 @@ class MainWidget(Widget):
         self.init_vertical_lines()
         self.init_horizontal_lines()
         self.init_tiles()
+        self.init_ship()
+        self.pre_fill_tiles_coordinates()
         self.generate_tiles_coordinate()
         
         if self.is_desktop():
@@ -61,6 +69,26 @@ class MainWidget(Widget):
         if platform in ('linux', 'windows', 'macosx'):
             return True
         return False
+    
+    def init_ship(self):
+        with self.canvas:
+            Color(0, 0, 1)
+            self.ship = Triangle()
+            
+    def update_ship(self):
+        center_x = self.width / 2
+        base_y = self.SHIP_BASE_Y * self.height
+        ship_half_width = self.SHIP_WIDTH * self.width / 2
+        ship_height = self.SHIP_HEIGHT * self.height
+        # ...
+        #   2
+        # 1    3
+        # self.transfore
+        x1, y1 = self.transform(center_x - ship_half_width, base_y)
+        x2, y2 = self.transform(center_x, base_y + ship_height)
+        x3, y3 = self.transform(center_x + ship_half_width, base_y)
+        
+        self.ship.points = [x1, y1, x2, y2, x3, y3]
     
     def init_tiles(self):
         with self.canvas:
@@ -201,6 +229,7 @@ class MainWidget(Widget):
         time_factor = dt*60
         self.update_vertical_lines()
         self.update_horizontal_lines()
+        self.update_ship()
         self.update_tiles()
         self.current_offset_y += self.SPEED * time_factor  # move
         
