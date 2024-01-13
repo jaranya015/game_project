@@ -96,10 +96,25 @@ class MainWidget(Widget):
         x3, y3 = self.transform(*self.ship_coordinates[2])
         
         self.ship.points = [x1, y1, x2, y2, x3, y3]
+    
+    def check_ship_collision(self):
+        for i in range(0, len(self.titles_coordinates)):
+            ti_x, ti_y = self.titles_coordinates[i]
+            if ti_y > self.current_y_loop + 1 :
+                return False
+            if self.check_ship_collision_with_tile(ti_x, ti_y):
+                return True
+        return False
+    
         
     def check_ship_collision_with_tile(self, ti_x, ti_y):
         xmin, ymin = self.get_tile_coordinates(ti_x, ti_y)
         xmax, ymax = self.get_tile_coordinates(ti_x + 1, ti_y + 1)
+        for i in range(0, 3):
+            px, py = self.ship_coordinates[i]
+            if xmin <= px <= xmax and ymin <= py <= ymax :
+                return True
+        return False
     
     def init_tiles(self):
         with self.canvas:
@@ -255,6 +270,9 @@ class MainWidget(Widget):
             
         speed_x = self.current_offset_x *self.width / 100
         self.current_offset_x += speed_x * time_factor
+        
+        if not self.check_ship_collision:
+            print("GAME OVER")
     
 class CompsuApp(App):
     def build(self):
