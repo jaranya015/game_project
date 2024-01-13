@@ -26,6 +26,7 @@ def on_touch_down(self, touch):
 def on_touch_up(self, touch):
     #print("up")
     self.current_speed_x = 0
+    return True
     
 def on_motion(self, etype, motionevent):
     if etype == 'begin':
