@@ -21,18 +21,18 @@ class MainWidget(Widget):
     perspective_point_y = NumericProperty(0)
     
     V_NB_LINES = 8
-    V_LINES_SPACING = .4 # precentage in screen width
+    V_LINES_SPACING = .1 # precentage in screen width
     vertical_lines = []
     
     H_NB_LINES = 15
     H_LINES_SPACING = .1  #  percentage in screen height
     horizontal_lines = []
     
-    SPEED = .8
+    SPEED = .1
     current_offset_y = 0
     current_y_loop = 0
     
-    SPEED_x = 3.0
+    SPEED_x = 1.0
     current_offset_x = 0
     current_speed_x = 0
     
@@ -44,6 +44,7 @@ class MainWidget(Widget):
     SHIP_HEIGHT = 0.035
     SHIP_BASE_Y = 0.04
     ship = None
+    ship_coordinates = [(0, 0), (0, 0), (0, 0)]
 
     # ti_x = 1
     # ti_y = 2
@@ -85,11 +86,20 @@ class MainWidget(Widget):
         #   2
         # 1    3
         # self.transfore
-        x1, y1 = self.transform(center_x - ship_half_width, base_y)
-        x2, y2 = self.transform(center_x, base_y + ship_height)
-        x3, y3 = self.transform(center_x + ship_half_width, base_y)
+        self.ship_coordinates[0] = (center_x - ship_half_width, base_y)
+        self.ship_coordinates[1] = (center_x - ship_half_width, base_y)
+        self.ship_coordinates[2] = (center_x - ship_half_width, base_y)
+        
+        
+        x1, y1 = self.transform(*self.ship_coordinates[0])
+        x2, y2 = self.transform(*self.ship_coordinates[1])
+        x3, y3 = self.transform(*self.ship_coordinates[2])
         
         self.ship.points = [x1, y1, x2, y2, x3, y3]
+        
+    def check_ship_collision_with_tile(self, ti_x, ti_y):
+        xmin, ymin = self.get_tile_coordinates(ti_x, ti_y)
+        xmax, ymax = self.get_tile_coordinates(ti_x + 1, ti_y + 1)
     
     def init_tiles(self):
         with self.canvas:
