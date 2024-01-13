@@ -74,7 +74,7 @@ class MainWidget(Widget):
     
     def init_ship(self):
         with self.canvas:
-            Color(0, 0, 1)
+            Color(1, 0, 0)
             self.ship = Triangle()
             
     def update_ship(self):
@@ -87,16 +87,15 @@ class MainWidget(Widget):
         # 1    3
         # self.transfore
         self.ship_coordinates[0] = (center_x - ship_half_width, base_y)
-        self.ship_coordinates[1] = (center_x - ship_half_width, base_y)
-        self.ship_coordinates[2] = (center_x - ship_half_width, base_y)
-        
-        
+        self.ship_coordinates[1] = (center_x + ship_half_width, base_y)
+        self.ship_coordinates[2] = (center_x, base_y + ship_height)
+
         x1, y1 = self.transform(*self.ship_coordinates[0])
         x2, y2 = self.transform(*self.ship_coordinates[1])
         x3, y3 = self.transform(*self.ship_coordinates[2])
-        
+
         self.ship.points = [x1, y1, x2, y2, x3, y3]
-    
+
     def check_ship_collision(self):
         for i in range(0, len(self.titles_coordinates)):
             ti_x, ti_y = self.titles_coordinates[i]
