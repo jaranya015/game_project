@@ -1,28 +1,32 @@
-Space Runner Game
+# Space Runner Game
 Space Runner is an exhilarating space-themed runner game developed with the Kivy framework. Navigate your ship through a perilous space environment, dodging obstacles and making split-second decisions to survive as long as possible. The game's graphics are rendered using Kivy's canvas, ensuring smooth and engaging gameplay. Ready for the challenge? Dive into the Space Runner experience now!
 
-Table of Contents
-Installation
-Features
-Gameplay
-Code Structure
-Contributing
-Installation
+#๒ Table of Contents
+
+- [Installation](#installation)
+- [Features](#features)
+- [Gameplay](#gameplay)
+- [Code Structure](#code-structure)
+- [Contributing](#contributing)
+  
+## Installation
 Before you begin, ensure that you have Python and Kivy installed on your system. Follow these steps to get Space Runner up and running:
 
-Clone the repository:
-bash
-Copy code
+1. Clone the repository:
+```bash
 git clone https://github.com/jaranya015/game_project.git
-Navigate to the game directory:
-bash
-Copy code
+
+1. Navigate to the game directory:
+```bash
 cd game_project
-Install the required packages:
-Copy code
+
+2. Install the required packages:
+```bash
 pip install kivy
 pip install -r requirements.txt
-Features
+
+## Features
+
 Smooth and intuitive controls designed for desktop environments.
 Dynamic obstacles and game environment generated in real-time.
 Responsive ship controls allowing for quick dodging and maneuvering.
