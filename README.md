@@ -13,12 +13,15 @@ Space Runner is an exhilarating space-themed runner game developed with the Kivy
 Before you begin, ensure that you have Python and Kivy installed on your system. Follow these steps to get Space Runner up and running:
 
 1. **Clone the repository:**
+
 git clone https://github.com/jaranya015/game_project.git
 
 2. ** Navigate to the game directory:**
+   
 cd game_project
 
-3. **Install the required packages:**
+4. **Install the required packages:**
+   
 pip install kivy
 pip install -r requirements.txt
 
