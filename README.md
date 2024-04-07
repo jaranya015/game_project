@@ -14,16 +14,16 @@ Before you begin, ensure that you have Python and Kivy installed on your system.
 
 1. **Clone the repository:**
 
-git clone https://github.com/jaranya015/game_project.git
+  git clone https://github.com/jaranya015/game_project.git
 
-2. ** Navigate to the game directory:**
+2. **Navigate to the game directory:**
    
-cd game_project
+  cd game_project
 
 4. **Install the required packages:**
    
-pip install kivy
-pip install -r requirements.txt
+  pip install kivy
+  pip install -r requirements.txt
 
 ## Features
 
